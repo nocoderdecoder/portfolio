@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anshul Gupta - AI Portfolio</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #1a1a1a;
+            background: #fafafa;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            padding: 80px 0 60px;
+            text-align: center;
+        }
+        
+        h1 {
+            font-size: 3em;
+            font-weight: 700;
+            margin-bottom: 10px;
+            letter-spacing: -1px;
+        }
+        
+        .tagline {
+            font-size: 1.2em;
+            color: #666;
+            margin-bottom: 30px;
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        
+        .social-links a {
+            color: #1a1a1a;
+            text-decoration: none;
+            font-size: 0.95em;
+            transition: color 0.3s;
+        }
+        
+        .social-links a:hover {
+            color: #0066cc;
+        }
+        
+        section {
+            margin: 80px 0;
+        }
+        
+        h2 {
+            font-size: 1.8em;
+            margin-bottom: 40px;
+            font-weight: 600;
+            border-bottom: 1px solid #e0e0e0;
+            padding-bottom: 10px;
+        }
+        
+        .project-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+        
+        .project-card {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .project-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        
+        .project-card h3 {
+            font-size: 1.3em;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+        
+        .project-card p {
+            color: #666;
+            margin-bottom: 15px;
+            font-size: 0.95em;
+        }
+        
+        .project-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 15px;
+        }
+        
+        .tag {
+            background: #f0f0f0;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            color: #555;
+        }
+        
+        .project-link {
+            display: inline-block;
+            margin-top: 15px;
+            color: #0066cc;
+            text-decoration: none;
+            font-size: 0.9em;
+            font-weight: 500;
+        }
+        
+        .project-link:hover {
+            text-decoration: underline;
+        }
+        
+        .blog-list {
+            list-style: none;
+        }
+        
+        .blog-item {
+            background: white;
+            padding: 25px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+            transition: transform 0.3s;
+        }
+        
+        .blog-item:hover {
+            transform: translateX(10px);
+        }
+        
+        .blog-item h3 {
+            font-size: 1.2em;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        
+        .blog-date {
+            color: #999;
+            font-size: 0.85em;
+            margin-bottom: 10px;
+        }
+        
+        .blog-item p {
+            color: #666;
+            font-size: 0.95em;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 60px 0 40px;
+            color: #999;
+            font-size: 0.9em;
+            border-top: 1px solid #e0e0e0;
+            margin-top: 80px;
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2em;
+            }
+            
+            .tagline {
+                font-size: 1em;
+            }
+            
+            section {
+                margin: 50px 0;
+            }
+            
+            .project-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Your Name</h1>
+            <p class="tagline">Building intelligent applications with AI</p>
+            <div class="social-links">
+                <a href="https://twitter.com/yourhandle" target="_blank">Twitter</a>
+                <a href="https://linkedin.com/in/yourprofile" target="_blank">LinkedIn</a>
+                <a href="https://github.com/yourusername" target="_blank">GitHub</a>
+                <a href="mailto:your@email.com">Email</a>
+            </div>
+        </header>
+
+        <section id="projects">
+            <h2>Projects</h2>
+            <div class="project-grid">
+                <div class="project-card">
+                    <h3>Project Name 1</h3>
+                    <p>A brief description of what this project does and the problem it solves. Keep it concise and focused on value.</p>
+                    <div class="project-tags">
+                        <span class="tag">GPT-4</span>
+                        <span class="tag">Bubble</span>
+                        <span class="tag">No-code</span>
+                    </div>
+                    <a href="#" class="project-link">View Project →</a>
+                </div>
+
+                <div class="project-card">
+                    <h3>Project Name 2</h3>
+                    <p>Another AI application showcasing different capabilities. Highlight the unique aspects and use cases.</p>
+                    <div class="project-tags">
+                        <span class="tag">Claude</span>
+                        <span class="tag">API</span>
+                        <span class="tag">Automation</span>
+                    </div>
+                    <a href="#" class="project-link">View Project →</a>
+                </div>
+
+                <div class="project-card">
+                    <h3>Project Name 3</h3>
+                    <p>Describe the innovation or specific problem this solves. Include any impressive results or metrics.</p>
+                    <div class="project-tags">
+                        <span class="tag">Voice AI</span>
+                        <span class="tag">FlutterFlow</span>
+                    </div>
+                    <a href="#" class="project-link">View Project →</a>
+                </div>
+            </div>
+        </section>
+
+        <section id="writing">
+            <h2>Writing</h2>
+            <ul class="blog-list">
+                <li class="blog-item">
+                    <h3>Blog Post Title Goes Here</h3>
+                    <div class="blog-date">October 2024</div>
+                    <p>A compelling summary of your blog post that makes people want to read more. Focus on the key insight or takeaway.</p>
+                    <a href="#" class="project-link">Read more →</a>
+                </li>
+                <li class="blog-item">
+                    <h3>Another Insightful Post</h3>
+                    <div class="blog-date">September 2024</div>
+                    <p>Share your learnings, frameworks, or perspectives on AI. These establish your thought leadership.</p>
+                    <a href="#" class="project-link">Read more →</a>
+                </li>
+                <li class="blog-item">
+                    <h3>Technical Deep Dive</h3>
+                    <div class="blog-date">August 2024</div>
+                    <p>Tutorial or case study showing your expertise in a specific area of AI applications.</p>
+                    <a href="#" class="project-link">Read more →</a>
+                </li>
+            </ul>
+        </section>
+
+        <section id="about">
+            <h2>About</h2>
+            <div style="background: white; padding: 40px; border-radius: 8px; border: 1px solid #e0e0e0;">
+                <p style="font-size: 1.1em; line-height: 1.8; color: #333;">
+                    I build practical AI applications that solve real problems. My focus is on making AI accessible through no-code tools and thoughtful design. Currently exploring [your current focus area].
+                </p>
+                <p style="font-size: 1.1em; line-height: 1.8; color: #333; margin-top: 20px;">
+                    I share what I learn about AI implementation, product building, and the intersection of technology and human needs.
+                </p>
+            </div>
+        </section>
+
+        <footer>
+            <p>© 2024 Your Name. Built with curiosity and AI.</p>
+        </footer>
+    </div>
+</body>
+</html>
