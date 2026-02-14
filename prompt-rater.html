@@ -1,0 +1,1111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prompt Rater — by Anshul G</title>
+    <meta name="description" content="Paste any AI prompt and get instant ratings, feedback, and an improved version powered by Claude.">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎯</text></svg>">
+    <style>
+        :root {
+            --bg: #0f0f14;
+            --surface: #1a1a24;
+            --surface-2: #22222e;
+            --border: #2a2a3a;
+            --text: #e8e8ed;
+            --text-secondary: #a0a0b0;
+            --text-muted: #5a5a70;
+            --accent: #8b5cf6;
+            --accent-2: #3b82f6;
+            --accent-glow: rgba(139, 92, 246, 0.15);
+            --green: #34d399;
+            --yellow: #fbbf24;
+            --red: #f87171;
+            --radius: 12px;
+            --transition: 0.2s ease;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        /* ===== Header ===== */
+        .header {
+            background: linear-gradient(135deg, #1a0a2e 0%, #0f0f1a 50%, #0a1628 100%);
+            border-bottom: 1px solid var(--border);
+            padding: 48px 24px 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -40%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 600px;
+            height: 300px;
+            background: radial-gradient(ellipse, rgba(139, 92, 246, 0.12) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .back-link {
+            position: absolute;
+            top: 20px;
+            left: 24px;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.88em;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: color var(--transition);
+        }
+
+        .back-link:hover { color: var(--accent); }
+
+        .header-badge {
+            display: inline-block;
+            background: rgba(139, 92, 246, 0.15);
+            color: var(--accent);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            margin-bottom: 16px;
+        }
+
+        .header h1 {
+            font-size: 2.6em;
+            font-weight: 800;
+            letter-spacing: -1px;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #fff 30%, #a78bfa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header p {
+            color: var(--text-secondary);
+            font-size: 1.05em;
+            max-width: 480px;
+            margin: 0 auto;
+        }
+
+        /* ===== Layout ===== */
+        .container {
+            max-width: 780px;
+            margin: 0 auto;
+            padding: 40px 24px 80px;
+        }
+
+        /* ===== API Key Section ===== */
+        .api-section {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 20px 24px;
+            margin-bottom: 28px;
+        }
+
+        .api-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .api-header-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.92em;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        .api-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.78em;
+            font-weight: 500;
+            padding: 2px 10px;
+            border-radius: 10px;
+        }
+
+        .api-status.set {
+            background: rgba(52, 211, 153, 0.12);
+            color: var(--green);
+            border: 1px solid rgba(52, 211, 153, 0.2);
+        }
+
+        .api-status.unset {
+            background: rgba(251, 191, 36, 0.1);
+            color: var(--yellow);
+            border: 1px solid rgba(251, 191, 36, 0.2);
+        }
+
+        .api-body {
+            margin-top: 16px;
+        }
+
+        .api-body.hidden { display: none; }
+
+        .api-row {
+            display: flex;
+            gap: 10px;
+        }
+
+        .api-input {
+            flex: 1;
+            background: var(--surface-2);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 10px 14px;
+            color: var(--text);
+            font-size: 0.88em;
+            font-family: 'Courier New', monospace;
+            outline: none;
+            transition: border-color var(--transition);
+        }
+
+        .api-input:focus { border-color: var(--accent); }
+        .api-input::placeholder { color: var(--text-muted); }
+
+        .api-save-btn {
+            background: var(--accent);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 18px;
+            font-size: 0.88em;
+            font-weight: 600;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: opacity var(--transition);
+        }
+
+        .api-save-btn:hover { opacity: 0.88; }
+
+        .api-hint {
+            margin-top: 10px;
+            font-size: 0.78em;
+            color: var(--text-muted);
+        }
+
+        .api-hint a { color: var(--accent); }
+
+        /* ===== Input Section ===== */
+        .input-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 28px;
+            margin-bottom: 28px;
+        }
+
+        .input-label {
+            display: block;
+            font-size: 0.9em;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+        }
+
+        .prompt-textarea {
+            width: 100%;
+            background: var(--surface-2);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 16px;
+            color: var(--text);
+            font-size: 0.97em;
+            font-family: inherit;
+            line-height: 1.7;
+            resize: vertical;
+            min-height: 160px;
+            outline: none;
+            transition: border-color var(--transition), box-shadow var(--transition);
+        }
+
+        .prompt-textarea:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accent-glow);
+        }
+
+        .prompt-textarea::placeholder { color: var(--text-muted); }
+
+        .input-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 14px;
+        }
+
+        .char-count {
+            font-size: 0.8em;
+            color: var(--text-muted);
+        }
+
+        .rate-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(135deg, var(--accent), var(--accent-2));
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            padding: 12px 28px;
+            font-size: 0.97em;
+            font-weight: 700;
+            cursor: pointer;
+            transition: opacity var(--transition), transform var(--transition);
+            letter-spacing: 0.01em;
+        }
+
+        .rate-btn:hover:not(:disabled) {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+
+        .rate-btn:disabled {
+            opacity: 0.45;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* ===== Loading ===== */
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 56px 24px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            margin-bottom: 28px;
+        }
+
+        .loading.visible { display: block; }
+
+        .spinner {
+            width: 44px;
+            height: 44px;
+            border: 3px solid var(--border);
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .loading p {
+            color: var(--text-secondary);
+            font-size: 0.95em;
+        }
+
+        .loading .loading-sub {
+            color: var(--text-muted);
+            font-size: 0.82em;
+            margin-top: 6px;
+        }
+
+        /* ===== Error ===== */
+        .error-box {
+            display: none;
+            background: rgba(248, 113, 113, 0.08);
+            border: 1px solid rgba(248, 113, 113, 0.25);
+            border-radius: var(--radius);
+            padding: 20px 24px;
+            margin-bottom: 28px;
+            color: var(--red);
+            font-size: 0.92em;
+        }
+
+        .error-box.visible { display: block; }
+
+        /* ===== Results ===== */
+        .results {
+            display: none;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .results.visible { display: flex; }
+
+        /* Score Card */
+        .score-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 32px;
+            display: flex;
+            align-items: center;
+            gap: 32px;
+        }
+
+        .score-circle {
+            flex-shrink: 0;
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border: 4px solid;
+            position: relative;
+        }
+
+        .score-circle.excellent { border-color: var(--green); background: rgba(52, 211, 153, 0.08); }
+        .score-circle.good      { border-color: #60a5fa;     background: rgba(96, 165, 250, 0.08); }
+        .score-circle.average   { border-color: var(--yellow); background: rgba(251, 191, 36, 0.08); }
+        .score-circle.poor      { border-color: var(--red);   background: rgba(248, 113, 113, 0.08); }
+
+        .score-number {
+            font-size: 2.2em;
+            font-weight: 800;
+            line-height: 1;
+        }
+
+        .score-circle.excellent .score-number { color: var(--green); }
+        .score-circle.good      .score-number { color: #60a5fa; }
+        .score-circle.average   .score-number { color: var(--yellow); }
+        .score-circle.poor      .score-number { color: var(--red); }
+
+        .score-denom {
+            font-size: 0.72em;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        .score-info { flex: 1; }
+
+        .score-label {
+            font-size: 1.35em;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .score-summary {
+            color: var(--text-secondary);
+            font-size: 0.95em;
+            line-height: 1.6;
+        }
+
+        /* Dimensions */
+        .dimensions-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 28px;
+        }
+
+        .card-title {
+            font-size: 0.78em;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--text-muted);
+            margin-bottom: 20px;
+        }
+
+        .dimension-row {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 14px;
+        }
+
+        .dimension-row:last-child { margin-bottom: 0; }
+
+        .dimension-label {
+            width: 100px;
+            font-size: 0.88em;
+            font-weight: 500;
+            color: var(--text-secondary);
+            flex-shrink: 0;
+        }
+
+        .dimension-bar-bg {
+            flex: 1;
+            height: 8px;
+            background: var(--surface-2);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .dimension-bar-fill {
+            height: 100%;
+            border-radius: 4px;
+            background: linear-gradient(90deg, var(--accent), var(--accent-2));
+            transition: width 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            width: 0%;
+        }
+
+        .dimension-score {
+            width: 32px;
+            text-align: right;
+            font-size: 0.85em;
+            font-weight: 700;
+            color: var(--text);
+            flex-shrink: 0;
+        }
+
+        /* Feedback Sections */
+        .feedback-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .feedback-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 24px;
+        }
+
+        .feedback-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.78em;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+        }
+
+        .feedback-title .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .strengths-card .dot { background: var(--green); }
+        .weaknesses-card .dot { background: var(--red); }
+
+        .feedback-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .feedback-list li {
+            font-size: 0.9em;
+            color: var(--text-secondary);
+            padding-left: 14px;
+            position: relative;
+            line-height: 1.5;
+        }
+
+        .feedback-list li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 8px;
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+        }
+
+        .strengths-card .feedback-list li::before { background: var(--green); }
+        .weaknesses-card .feedback-list li::before { background: var(--red); }
+
+        /* Suggestions */
+        .suggestions-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 24px;
+        }
+
+        .suggestions-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .suggestions-list li {
+            display: flex;
+            gap: 12px;
+            font-size: 0.92em;
+            color: var(--text-secondary);
+            line-height: 1.55;
+        }
+
+        .suggestion-num {
+            flex-shrink: 0;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: rgba(139, 92, 246, 0.15);
+            border: 1px solid rgba(139, 92, 246, 0.25);
+            color: var(--accent);
+            font-size: 0.75em;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 1px;
+        }
+
+        /* Improved Prompt */
+        .improved-card {
+            background: var(--surface);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            border-radius: var(--radius);
+            padding: 24px;
+            position: relative;
+        }
+
+        .improved-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+
+        .improved-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.78em;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--accent);
+        }
+
+        .copy-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(139, 92, 246, 0.12);
+            color: var(--accent);
+            border: 1px solid rgba(139, 92, 246, 0.25);
+            border-radius: 7px;
+            padding: 6px 14px;
+            font-size: 0.8em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition);
+        }
+
+        .copy-btn:hover {
+            background: rgba(139, 92, 246, 0.2);
+            border-color: rgba(139, 92, 246, 0.4);
+        }
+
+        .copy-btn.copied {
+            background: rgba(52, 211, 153, 0.12);
+            color: var(--green);
+            border-color: rgba(52, 211, 153, 0.3);
+        }
+
+        .improved-text {
+            background: var(--surface-2);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 16px;
+            font-size: 0.93em;
+            color: var(--text);
+            line-height: 1.7;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        /* Try Again */
+        .try-again-row {
+            text-align: center;
+            padding-top: 8px;
+        }
+
+        .try-again-btn {
+            background: none;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-secondary);
+            padding: 10px 24px;
+            font-size: 0.88em;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all var(--transition);
+        }
+
+        .try-again-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        /* ===== Responsive ===== */
+        @media (max-width: 600px) {
+            .header h1 { font-size: 1.9em; }
+
+            .score-card {
+                flex-direction: column;
+                text-align: center;
+                gap: 20px;
+            }
+
+            .feedback-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .input-footer {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+
+            .rate-btn { width: 100%; justify-content: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <a href="index.html" class="back-link">&#8592; Back to Portfolio</a>
+        <div class="header-badge">Free Tool</div>
+        <h1>🎯 Prompt Rater</h1>
+        <p>Paste any AI prompt and get an instant score, feedback, and an improved version — powered by Claude.</p>
+    </div>
+
+    <div class="container">
+
+        <!-- API Key -->
+        <div class="api-section" id="apiSection">
+            <div class="api-header" onclick="toggleApiSection()">
+                <div class="api-header-left">
+                    <span>🔑</span>
+                    <span>Anthropic API Key</span>
+                    <span class="api-status unset" id="apiStatus">&#9679; Not set</span>
+                </div>
+                <span style="color: var(--text-muted); font-size: 0.85em;" id="apiToggleIcon">&#9660; Set key</span>
+            </div>
+            <div class="api-body" id="apiBody">
+                <div class="api-row">
+                    <input
+                        type="password"
+                        class="api-input"
+                        id="apiKeyInput"
+                        placeholder="sk-ant-..."
+                        autocomplete="off"
+                        spellcheck="false"
+                    >
+                    <button class="api-save-btn" onclick="saveApiKey()">Save</button>
+                </div>
+                <p class="api-hint">
+                    Your key is stored only in your browser (localStorage) and never sent anywhere except Anthropic's API.
+                    Get a key at <a href="https://console.anthropic.com" target="_blank" rel="noopener noreferrer">console.anthropic.com</a>
+                </p>
+            </div>
+        </div>
+
+        <!-- Prompt Input -->
+        <div class="input-card">
+            <label class="input-label" for="promptInput">Your Prompt</label>
+            <textarea
+                class="prompt-textarea"
+                id="promptInput"
+                placeholder="Paste or type any prompt here — e.g. 'Write a blog post about AI' or a complex multi-step instruction..."
+                oninput="updateCharCount()"
+            ></textarea>
+            <div class="input-footer">
+                <span class="char-count" id="charCount">0 characters</span>
+                <button class="rate-btn" id="rateBtn" onclick="ratePrompt()">
+                    <span>Rate My Prompt</span>
+                    <span>&#8594;</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Loading -->
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p>Analysing your prompt...</p>
+            <p class="loading-sub">Claude is reading, scoring, and rewriting it</p>
+        </div>
+
+        <!-- Error -->
+        <div class="error-box" id="errorBox"></div>
+
+        <!-- Results -->
+        <div class="results" id="results">
+
+            <!-- Score -->
+            <div class="score-card">
+                <div class="score-circle" id="scoreCircle">
+                    <div class="score-number" id="scoreNumber">—</div>
+                    <div class="score-denom">out of 10</div>
+                </div>
+                <div class="score-info">
+                    <div class="score-label" id="scoreLabel">—</div>
+                    <div class="score-summary" id="scoreSummary">—</div>
+                </div>
+            </div>
+
+            <!-- Dimensions -->
+            <div class="dimensions-card">
+                <div class="card-title">Breakdown</div>
+                <div class="dimension-row">
+                    <div class="dimension-label">Clarity</div>
+                    <div class="dimension-bar-bg"><div class="dimension-bar-fill" id="bar-clarity"></div></div>
+                    <div class="dimension-score" id="score-clarity">—</div>
+                </div>
+                <div class="dimension-row">
+                    <div class="dimension-label">Specificity</div>
+                    <div class="dimension-bar-bg"><div class="dimension-bar-fill" id="bar-specificity"></div></div>
+                    <div class="dimension-score" id="score-specificity">—</div>
+                </div>
+                <div class="dimension-row">
+                    <div class="dimension-label">Context</div>
+                    <div class="dimension-bar-bg"><div class="dimension-bar-fill" id="bar-context"></div></div>
+                    <div class="dimension-score" id="score-context">—</div>
+                </div>
+                <div class="dimension-row">
+                    <div class="dimension-label">Structure</div>
+                    <div class="dimension-bar-bg"><div class="dimension-bar-fill" id="bar-structure"></div></div>
+                    <div class="dimension-score" id="score-structure">—</div>
+                </div>
+            </div>
+
+            <!-- Strengths + Weaknesses -->
+            <div class="feedback-grid">
+                <div class="feedback-card strengths-card">
+                    <div class="feedback-title">
+                        <div class="dot"></div>
+                        What's working
+                    </div>
+                    <ul class="feedback-list" id="strengthsList"></ul>
+                </div>
+                <div class="feedback-card weaknesses-card">
+                    <div class="feedback-title">
+                        <div class="dot"></div>
+                        What's missing
+                    </div>
+                    <ul class="feedback-list" id="weaknessesList"></ul>
+                </div>
+            </div>
+
+            <!-- Suggestions -->
+            <div class="suggestions-card">
+                <div class="card-title" style="margin-bottom: 18px;">💡 Suggestions to improve</div>
+                <ul class="suggestions-list" id="suggestionsList"></ul>
+            </div>
+
+            <!-- Improved Prompt -->
+            <div class="improved-card">
+                <div class="improved-header">
+                    <div class="improved-title">
+                        <span>✨</span>
+                        Improved Prompt
+                    </div>
+                    <button class="copy-btn" id="copyBtn" onclick="copyImproved()">
+                        <span>&#128203;</span>
+                        <span id="copyLabel">Copy</span>
+                    </button>
+                </div>
+                <div class="improved-text" id="improvedText"></div>
+            </div>
+
+            <!-- Try Again -->
+            <div class="try-again-row">
+                <button class="try-again-btn" onclick="resetForm()">&#8635; Rate another prompt</button>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // ===== State =====
+        let savedApiKey = localStorage.getItem('anthropic_api_key') || '';
+
+        // ===== Init =====
+        (function init() {
+            if (savedApiKey) {
+                document.getElementById('apiKeyInput').value = savedApiKey;
+                setApiStatus(true);
+                document.getElementById('apiBody').classList.add('hidden');
+                document.getElementById('apiToggleIcon').textContent = '✏️ Edit';
+            }
+        })();
+
+        // ===== API Key =====
+        function toggleApiSection() {
+            const body = document.getElementById('apiBody');
+            body.classList.toggle('hidden');
+            document.getElementById('apiToggleIcon').textContent =
+                body.classList.contains('hidden')
+                    ? (savedApiKey ? '✏️ Edit' : '▾ Set key')
+                    : '▴ Hide';
+        }
+
+        function saveApiKey() {
+            const val = document.getElementById('apiKeyInput').value.trim();
+            if (!val.startsWith('sk-ant-')) {
+                alert('That doesn\'t look like a valid Anthropic API key. It should start with sk-ant-');
+                return;
+            }
+            savedApiKey = val;
+            localStorage.setItem('anthropic_api_key', val);
+            setApiStatus(true);
+            document.getElementById('apiBody').classList.add('hidden');
+            document.getElementById('apiToggleIcon').textContent = '✏️ Edit';
+        }
+
+        function setApiStatus(isSet) {
+            const el = document.getElementById('apiStatus');
+            if (isSet) {
+                el.textContent = '● Saved';
+                el.className = 'api-status set';
+            } else {
+                el.textContent = '● Not set';
+                el.className = 'api-status unset';
+            }
+        }
+
+        // ===== Char count =====
+        function updateCharCount() {
+            const len = document.getElementById('promptInput').value.length;
+            document.getElementById('charCount').textContent = len + ' character' + (len === 1 ? '' : 's');
+        }
+
+        // ===== Rate =====
+        async function ratePrompt() {
+            const prompt = document.getElementById('promptInput').value.trim();
+
+            if (!savedApiKey) {
+                showError('Please add your Anthropic API key first (click the key section above).');
+                return;
+            }
+            if (!prompt) {
+                showError('Please enter a prompt to rate.');
+                return;
+            }
+            if (prompt.length < 10) {
+                showError('Your prompt is too short to rate meaningfully. Try something longer.');
+                return;
+            }
+
+            setLoading(true);
+            clearError();
+            hideResults();
+
+            const systemPrompt = `You are an expert prompt engineer who helps people write better AI prompts. Analyse the given prompt and respond ONLY with a valid JSON object — no markdown, no explanation, just raw JSON.
+
+Use this exact structure:
+{
+  "score": <integer 1-10>,
+  "label": "<one of: Excellent / Good / Average / Needs Work>",
+  "summary": "<1 sentence honest overall assessment, written conversationally>",
+  "dimensions": {
+    "clarity": <integer 1-10>,
+    "specificity": <integer 1-10>,
+    "context": <integer 1-10>,
+    "structure": <integer 1-10>
+  },
+  "strengths": ["<strength>", "<strength>"],
+  "weaknesses": ["<weakness>", "<weakness>"],
+  "suggestions": ["<actionable suggestion>", "<actionable suggestion>", "<actionable suggestion>"],
+  "improved_prompt": "<a complete, rewritten version of the prompt that addresses all weaknesses>"
+}
+
+Scoring guide:
+- Clarity: Is the ask unambiguous and easy to understand?
+- Specificity: Does it define the desired output, tone, length, format?
+- Context: Does it provide background, role, or relevant constraints?
+- Structure: Is it logically organised? Does it use formatting where helpful?
+
+Be honest but constructive. The improved_prompt should be noticeably better — not just slightly tweaked.`;
+
+            try {
+                const response = await fetch('https://api.anthropic.com/v1/messages', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'x-api-key': savedApiKey,
+                        'anthropic-version': '2023-06-01',
+                        'anthropic-dangerous-allow-browser': 'true'
+                    },
+                    body: JSON.stringify({
+                        model: 'claude-haiku-4-5-20251001',
+                        max_tokens: 1024,
+                        system: systemPrompt,
+                        messages: [{ role: 'user', content: prompt }]
+                    })
+                });
+
+                if (!response.ok) {
+                    const err = await response.json().catch(() => ({}));
+                    if (response.status === 401) throw new Error('Invalid API key. Please check your key in the settings above.');
+                    if (response.status === 429) throw new Error('Rate limit hit. Wait a moment and try again.');
+                    throw new Error(err.error?.message || 'API error: ' + response.status);
+                }
+
+                const data = await response.json();
+                const raw = data.content[0].text.trim();
+
+                // Strip markdown code fences if present
+                const jsonStr = raw.replace(/^```(?:json)?\n?/, '').replace(/\n?```$/, '').trim();
+                const result = JSON.parse(jsonStr);
+
+                setLoading(false);
+                renderResults(result);
+
+            } catch (err) {
+                setLoading(false);
+                showError(err.message || 'Something went wrong. Please try again.');
+            }
+        }
+
+        // ===== Render =====
+        function renderResults(r) {
+            // Score circle
+            const circle = document.getElementById('scoreCircle');
+            const scoreClass = r.score >= 8 ? 'excellent' : r.score >= 6 ? 'good' : r.score >= 4 ? 'average' : 'poor';
+            circle.className = 'score-circle ' + scoreClass;
+            document.getElementById('scoreNumber').textContent = r.score;
+            document.getElementById('scoreLabel').textContent = r.label || getLabelFromScore(r.score);
+            document.getElementById('scoreSummary').textContent = r.summary;
+
+            // Dimensions
+            renderBar('clarity', r.dimensions.clarity);
+            renderBar('specificity', r.dimensions.specificity);
+            renderBar('context', r.dimensions.context);
+            renderBar('structure', r.dimensions.structure);
+
+            // Strengths
+            const sl = document.getElementById('strengthsList');
+            sl.innerHTML = '';
+            (r.strengths || []).forEach(function(s) {
+                sl.innerHTML += '<li>' + escHtml(s) + '</li>';
+            });
+
+            // Weaknesses
+            const wl = document.getElementById('weaknessesList');
+            wl.innerHTML = '';
+            (r.weaknesses || []).forEach(function(w) {
+                wl.innerHTML += '<li>' + escHtml(w) + '</li>';
+            });
+
+            // Suggestions
+            const sugl = document.getElementById('suggestionsList');
+            sugl.innerHTML = '';
+            (r.suggestions || []).forEach(function(s, i) {
+                sugl.innerHTML += '<li><span class="suggestion-num">' + (i + 1) + '</span><span>' + escHtml(s) + '</span></li>';
+            });
+
+            // Improved prompt
+            document.getElementById('improvedText').textContent = r.improved_prompt;
+
+            // Show results
+            showResults();
+
+            // Animate bars after a tick
+            setTimeout(function() {
+                animateBars(r.dimensions);
+            }, 80);
+        }
+
+        function renderBar(name, value) {
+            document.getElementById('score-' + name).textContent = value + '/10';
+            document.getElementById('bar-' + name).style.width = '0%';
+        }
+
+        function animateBars(dims) {
+            ['clarity', 'specificity', 'context', 'structure'].forEach(function(d) {
+                document.getElementById('bar-' + d).style.width = (dims[d] * 10) + '%';
+            });
+        }
+
+        function getLabelFromScore(s) {
+            if (s >= 8) return 'Excellent';
+            if (s >= 6) return 'Good';
+            if (s >= 4) return 'Average';
+            return 'Needs Work';
+        }
+
+        function escHtml(str) {
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;');
+        }
+
+        // ===== Copy =====
+        function copyImproved() {
+            const text = document.getElementById('improvedText').textContent;
+            navigator.clipboard.writeText(text).then(function() {
+                const btn = document.getElementById('copyBtn');
+                const label = document.getElementById('copyLabel');
+                btn.classList.add('copied');
+                label.textContent = 'Copied!';
+                setTimeout(function() {
+                    btn.classList.remove('copied');
+                    label.textContent = 'Copy';
+                }, 2000);
+            });
+        }
+
+        // ===== UI helpers =====
+        function setLoading(on) {
+            document.getElementById('loading').classList.toggle('visible', on);
+            document.getElementById('rateBtn').disabled = on;
+            document.getElementById('rateBtn').querySelector('span').textContent =
+                on ? 'Rating...' : 'Rate My Prompt';
+        }
+
+        function showError(msg) {
+            const el = document.getElementById('errorBox');
+            el.textContent = '⚠️ ' + msg;
+            el.classList.add('visible');
+        }
+
+        function clearError() {
+            document.getElementById('errorBox').classList.remove('visible');
+        }
+
+        function showResults() {
+            document.getElementById('results').classList.add('visible');
+            document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        function hideResults() {
+            document.getElementById('results').classList.remove('visible');
+        }
+
+        function resetForm() {
+            hideResults();
+            clearError();
+            document.getElementById('promptInput').value = '';
+            updateCharCount();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
