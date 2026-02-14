@@ -3,285 +3,1041 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Anshul G - AI Portfolio</title>
+    <title>Anshul G - AI & No-Code Builder</title>
+    <meta name="description" content="Anshul G builds practical AI applications using no-code tools and modern APIs. Explore projects, writing, and insights on AI implementation.">
+    <meta name="author" content="Anshul G">
+    <meta name="keywords" content="AI, no-code, GPT-4, Claude, automation, Bubble, FlutterFlow, AI applications">
+
+    <!-- Open Graph / Social Sharing -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Anshul G - AI & No-Code Builder">
+    <meta property="og:description" content="Building practical AI applications that solve real problems. Explore projects, writing, and insights.">
+    <meta property="og:url" content="https://anshulg.dev">
+    <meta property="og:site_name" content="Anshul G Portfolio">
+
+    <!-- Favicon (inline SVG data URI) -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>A</text></svg>">
+
     <style>
+        /* ===== CSS Custom Properties ===== */
+        :root {
+            --color-bg: #fafafa;
+            --color-surface: #ffffff;
+            --color-text: #1a1a1a;
+            --color-text-secondary: #555;
+            --color-text-muted: #888;
+            --color-accent: #6c3ce0;
+            --color-accent-light: #8b5cf6;
+            --color-accent-subtle: #f3eefe;
+            --color-border: #e2e2e2;
+            --color-tag-bg: #f0f0f0;
+            --color-tag-text: #555;
+            --color-hero-gradient-start: #6c3ce0;
+            --color-hero-gradient-end: #3b82f6;
+            --color-nav-bg: rgba(250, 250, 250, 0.9);
+            --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.06);
+            --shadow-card-hover: 0 12px 32px rgba(108, 60, 224, 0.15);
+            --radius: 10px;
+            --transition: 0.3s ease;
+        }
+
+        /* ===== Dark Mode ===== */
+        [data-theme="dark"] {
+            --color-bg: #0f0f14;
+            --color-surface: #1a1a24;
+            --color-text: #e8e8ed;
+            --color-text-secondary: #a0a0b0;
+            --color-text-muted: #6b6b80;
+            --color-accent: #8b5cf6;
+            --color-accent-light: #a78bfa;
+            --color-accent-subtle: #1e1a2e;
+            --color-border: #2a2a3a;
+            --color-tag-bg: #22222e;
+            --color-tag-text: #a0a0b0;
+            --color-nav-bg: rgba(15, 15, 20, 0.92);
+            --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.2);
+            --shadow-card-hover: 0 12px 32px rgba(139, 92, 246, 0.2);
+        }
+
+        /* ===== Reset & Base ===== */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-        
+
+        html {
+            scroll-behavior: smooth;
+        }
+
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
             line-height: 1.6;
-            color: #1a1a1a;
-            background: #fafafa;
+            color: var(--color-text);
+            background: var(--color-bg);
+            transition: background var(--transition), color var(--transition);
         }
-        
-        .container {
-            max-width: 900px;
+
+        /* ===== Navbar ===== */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            background: var(--color-nav-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--color-border);
+            transition: background var(--transition), border-color var(--transition);
+        }
+
+        .nav-inner {
+            max-width: 960px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 0 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 56px;
         }
-        
-        header {
-            padding: 80px 0 60px;
-            text-align: center;
-        }
-        
-        h1 {
-            font-size: 3em;
+
+        .nav-logo {
             font-weight: 700;
-            margin-bottom: 10px;
-            letter-spacing: -1px;
-        }
-        
-        .tagline {
-            font-size: 1.2em;
-            color: #666;
-            margin-bottom: 30px;
-        }
-        
-        .social-links {
-            display: flex;
-            gap: 20px;
-            justify-content: center;
-            margin-top: 20px;
-        }
-        
-        .social-links a {
-            color: #1a1a1a;
+            font-size: 1.1em;
+            color: var(--color-text);
             text-decoration: none;
-            font-size: 0.95em;
-            transition: color 0.3s;
         }
-        
-        .social-links a:hover {
-            color: #0066cc;
+
+        .nav-logo span {
+            color: var(--color-accent);
         }
-        
-        section {
-            margin: 80px 0;
-        }
-        
-        h2 {
-            font-size: 1.8em;
-            margin-bottom: 40px;
-            font-weight: 600;
-            border-bottom: 1px solid #e0e0e0;
-            padding-bottom: 10px;
-        }
-        
-        .project-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 30px;
-        }
-        
-        .project-card {
-            background: white;
-            padding: 30px;
-            border-radius: 8px;
-            border: 1px solid #e0e0e0;
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-        
-        .project-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-        }
-        
-        .project-card h3 {
-            font-size: 1.3em;
-            margin-bottom: 10px;
-            font-weight: 600;
-        }
-        
-        .project-card p {
-            color: #666;
-            margin-bottom: 15px;
-            font-size: 0.95em;
-        }
-        
-        .project-tags {
+
+        .nav-links {
             display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-top: 15px;
+            align-items: center;
+            gap: 28px;
+            list-style: none;
         }
-        
-        .tag {
-            background: #f0f0f0;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 0.8em;
-            color: #555;
-        }
-        
-        .project-link {
-            display: inline-block;
-            margin-top: 15px;
-            color: #0066cc;
+
+        .nav-links a {
+            color: var(--color-text-secondary);
             text-decoration: none;
             font-size: 0.9em;
             font-weight: 500;
+            transition: color var(--transition);
         }
-        
-        .project-link:hover {
-            text-decoration: underline;
+
+        .nav-links a:hover,
+        .nav-links a:focus-visible {
+            color: var(--color-accent);
         }
-        
-        .blog-list {
-            list-style: none;
+
+        /* Dark mode toggle */
+        .theme-toggle {
+            background: none;
+            border: 2px solid var(--color-border);
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1em;
+            transition: border-color var(--transition), background var(--transition);
+            color: var(--color-text);
         }
-        
-        .blog-item {
-            background: white;
-            padding: 25px;
-            margin-bottom: 20px;
+
+        .theme-toggle:hover,
+        .theme-toggle:focus-visible {
+            border-color: var(--color-accent);
+            background: var(--color-accent-subtle);
+        }
+
+        .theme-toggle .icon-sun { display: none; }
+        .theme-toggle .icon-moon { display: inline; }
+        [data-theme="dark"] .theme-toggle .icon-sun { display: inline; }
+        [data-theme="dark"] .theme-toggle .icon-moon { display: none; }
+
+        /* ===== Container ===== */
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* ===== Hero / Header ===== */
+        header {
+            padding: 140px 0 80px;
+            text-align: center;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            background: var(--color-accent-subtle);
+            color: var(--color-accent);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+            margin-bottom: 24px;
+        }
+
+        h1 {
+            font-size: 3.2em;
+            font-weight: 800;
+            margin-bottom: 8px;
+            letter-spacing: -1.5px;
+            line-height: 1.1;
+        }
+
+        h1 .gradient-text {
+            background: linear-gradient(135deg, var(--color-hero-gradient-start), var(--color-hero-gradient-end));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .tagline {
+            font-size: 1.25em;
+            color: var(--color-text-secondary);
+            margin-bottom: 32px;
+            max-width: 540px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.6;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .social-links a {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--color-text-secondary);
+            text-decoration: none;
+            font-size: 0.9em;
+            font-weight: 500;
+            padding: 8px 16px;
+            border: 1px solid var(--color-border);
             border-radius: 8px;
-            border: 1px solid #e0e0e0;
-            transition: transform 0.3s;
+            transition: all var(--transition);
         }
-        
-        .blog-item:hover {
-            transform: translateX(10px);
+
+        .social-links a:hover,
+        .social-links a:focus-visible {
+            color: var(--color-accent);
+            border-color: var(--color-accent);
+            background: var(--color-accent-subtle);
         }
-        
-        .blog-item h3 {
+
+        /* ===== Sections ===== */
+        section {
+            margin: 100px 0;
+        }
+
+        .section-header {
+            margin-bottom: 48px;
+        }
+
+        h2 {
+            font-size: 2em;
+            font-weight: 700;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+
+        .section-subtitle {
+            color: var(--color-text-muted);
+            font-size: 1.05em;
+        }
+
+        /* ===== Project Cards ===== */
+        .project-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+        }
+
+        .project-card {
+            background: var(--color-surface);
+            border-radius: var(--radius);
+            border: 1px solid var(--color-border);
+            overflow: hidden;
+            transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
+            box-shadow: var(--shadow-card);
+        }
+
+        .project-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-card-hover);
+            border-color: var(--color-accent);
+        }
+
+        .project-card:focus-within {
+            outline: 2px solid var(--color-accent);
+            outline-offset: 2px;
+        }
+
+        .project-image {
+            height: 160px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5em;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .project-image-1 {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .project-image-2 {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .project-image-3 {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+
+        .project-body {
+            padding: 24px;
+        }
+
+        .project-card h3 {
             font-size: 1.2em;
             margin-bottom: 8px;
+            font-weight: 700;
+        }
+
+        .project-card p {
+            color: var(--color-text-secondary);
+            margin-bottom: 12px;
+            font-size: 0.93em;
+            line-height: 1.6;
+        }
+
+        .project-metric {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 0.82em;
+            color: var(--color-accent);
             font-weight: 600;
+            margin-bottom: 12px;
         }
-        
+
+        .project-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 16px;
+        }
+
+        .tag {
+            background: var(--color-tag-bg);
+            color: var(--color-tag-text);
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.78em;
+            font-weight: 500;
+            transition: background var(--transition), color var(--transition);
+        }
+
+        .project-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            color: var(--color-accent);
+            text-decoration: none;
+            font-size: 0.9em;
+            font-weight: 600;
+            transition: gap var(--transition);
+        }
+
+        .project-link:hover,
+        .project-link:focus-visible {
+            gap: 8px;
+        }
+
+        /* ===== Skills Section ===== */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 16px;
+        }
+
+        .skill-item {
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius);
+            padding: 20px 16px;
+            text-align: center;
+            transition: all var(--transition);
+            box-shadow: var(--shadow-card);
+        }
+
+        .skill-item:hover {
+            border-color: var(--color-accent);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-card-hover);
+        }
+
+        .skill-icon {
+            font-size: 1.8em;
+            margin-bottom: 8px;
+        }
+
+        .skill-name {
+            font-size: 0.88em;
+            font-weight: 600;
+            color: var(--color-text);
+        }
+
+        .skill-type {
+            font-size: 0.75em;
+            color: var(--color-text-muted);
+            margin-top: 2px;
+        }
+
+        /* ===== Blog / Writing ===== */
+        .blog-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .blog-item {
+            background: var(--color-surface);
+            padding: 28px;
+            border-radius: var(--radius);
+            border: 1px solid var(--color-border);
+            transition: all var(--transition);
+            box-shadow: var(--shadow-card);
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 24px;
+        }
+
+        .blog-item:hover {
+            border-color: var(--color-accent);
+            box-shadow: var(--shadow-card-hover);
+        }
+
+        .blog-content {
+            flex: 1;
+        }
+
+        .blog-item h3 {
+            font-size: 1.15em;
+            margin-bottom: 6px;
+            font-weight: 700;
+        }
+
+        .blog-item h3 a {
+            color: var(--color-text);
+            text-decoration: none;
+            transition: color var(--transition);
+        }
+
+        .blog-item h3 a:hover,
+        .blog-item h3 a:focus-visible {
+            color: var(--color-accent);
+        }
+
         .blog-date {
-            color: #999;
-            font-size: 0.85em;
-            margin-bottom: 10px;
+            color: var(--color-text-muted);
+            font-size: 0.82em;
+            margin-bottom: 8px;
         }
-        
+
         .blog-item p {
-            color: #666;
-            font-size: 0.95em;
+            color: var(--color-text-secondary);
+            font-size: 0.93em;
+            line-height: 1.6;
         }
-        
+
+        .blog-read-time {
+            color: var(--color-text-muted);
+            font-size: 0.8em;
+            white-space: nowrap;
+            margin-top: 4px;
+        }
+
+        /* ===== About Section ===== */
+        .about-card {
+            background: var(--color-surface);
+            padding: 48px;
+            border-radius: var(--radius);
+            border: 1px solid var(--color-border);
+            box-shadow: var(--shadow-card);
+        }
+
+        .about-card p {
+            font-size: 1.1em;
+            line-height: 1.8;
+            color: var(--color-text-secondary);
+        }
+
+        .about-card p + p {
+            margin-top: 20px;
+        }
+
+        .about-highlights {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 20px;
+            margin-top: 32px;
+            padding-top: 32px;
+            border-top: 1px solid var(--color-border);
+        }
+
+        .about-stat {
+            text-align: center;
+        }
+
+        .about-stat-number {
+            font-size: 2em;
+            font-weight: 800;
+            color: var(--color-accent);
+            line-height: 1;
+        }
+
+        .about-stat-label {
+            font-size: 0.85em;
+            color: var(--color-text-muted);
+            margin-top: 4px;
+        }
+
+        /* ===== Contact / CTA Section ===== */
+        .contact-section {
+            text-align: center;
+            background: linear-gradient(135deg, var(--color-hero-gradient-start), var(--color-hero-gradient-end));
+            padding: 64px 48px;
+            border-radius: var(--radius);
+            color: #fff;
+        }
+
+        .contact-section h2 {
+            color: #fff;
+            margin-bottom: 12px;
+        }
+
+        .contact-subtitle {
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 1.1em;
+            margin-bottom: 32px;
+            max-width: 480px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .contact-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 28px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95em;
+            transition: all var(--transition);
+        }
+
+        .btn-primary {
+            background: #fff;
+            color: var(--color-hero-gradient-start);
+        }
+
+        .btn-primary:hover,
+        .btn-primary:focus-visible {
+            background: rgba(255, 255, 255, 0.9);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: #fff;
+            border: 2px solid rgba(255, 255, 255, 0.4);
+        }
+
+        .btn-outline:hover,
+        .btn-outline:focus-visible {
+            border-color: #fff;
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+
+        /* ===== Footer ===== */
         footer {
             text-align: center;
-            padding: 60px 0 40px;
-            color: #999;
-            font-size: 0.9em;
-            border-top: 1px solid #e0e0e0;
-            margin-top: 80px;
+            padding: 48px 0 32px;
+            color: var(--color-text-muted);
+            font-size: 0.85em;
+            border-top: 1px solid var(--color-border);
+            margin-top: 100px;
         }
-        
+
+        footer a {
+            color: var(--color-text-muted);
+            text-decoration: none;
+            transition: color var(--transition);
+        }
+
+        footer a:hover {
+            color: var(--color-accent);
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 24px;
+            justify-content: center;
+            margin-bottom: 16px;
+        }
+
+        /* ===== Scroll Animations ===== */
+        .reveal {
+            opacity: 0;
+            transform: translateY(24px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Stagger children */
+        .reveal-stagger > * {
+            opacity: 0;
+            transform: translateY(16px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .reveal-stagger.visible > *:nth-child(1) { transition-delay: 0s; }
+        .reveal-stagger.visible > *:nth-child(2) { transition-delay: 0.1s; }
+        .reveal-stagger.visible > *:nth-child(3) { transition-delay: 0.2s; }
+        .reveal-stagger.visible > *:nth-child(4) { transition-delay: 0.3s; }
+        .reveal-stagger.visible > *:nth-child(5) { transition-delay: 0.4s; }
+        .reveal-stagger.visible > *:nth-child(6) { transition-delay: 0.5s; }
+
+        .reveal-stagger.visible > * {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ===== Focus Visible for Accessibility ===== */
+        a:focus-visible,
+        button:focus-visible {
+            outline: 2px solid var(--color-accent);
+            outline-offset: 2px;
+            border-radius: 4px;
+        }
+
+        /* ===== Mobile Menu ===== */
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.4em;
+            cursor: pointer;
+            color: var(--color-text);
+            padding: 4px;
+        }
+
+        /* ===== Responsive ===== */
         @media (max-width: 768px) {
             h1 {
-                font-size: 2em;
+                font-size: 2.2em;
             }
-            
+
             .tagline {
-                font-size: 1em;
+                font-size: 1.05em;
             }
-            
+
+            header {
+                padding: 120px 0 60px;
+            }
+
             section {
-                margin: 50px 0;
+                margin: 60px 0;
             }
-            
+
             .project-grid {
                 grid-template-columns: 1fr;
+            }
+
+            .skills-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .blog-item {
+                flex-direction: column;
+                gap: 8px;
+                padding: 20px;
+            }
+
+            .about-card {
+                padding: 28px;
+            }
+
+            .about-highlights {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .contact-section {
+                padding: 48px 24px;
+            }
+
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 56px;
+                left: 0;
+                right: 0;
+                background: var(--color-nav-bg);
+                backdrop-filter: blur(12px);
+                flex-direction: column;
+                padding: 16px 24px;
+                gap: 12px;
+                border-bottom: 1px solid var(--color-border);
+            }
+
+            .nav-links.open {
+                display: flex;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .skills-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .about-highlights {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .contact-buttons {
+                flex-direction: column;
+                align-items: center;
             }
         }
     </style>
 </head>
 <body>
+    <!-- Navigation -->
+    <nav role="navigation" aria-label="Main navigation">
+        <div class="nav-inner">
+            <a href="#" class="nav-logo" aria-label="Home">Anshul<span>.</span></a>
+            <button class="mobile-menu-btn" aria-label="Toggle menu" aria-expanded="false" onclick="this.nextElementSibling.classList.toggle('open'); this.setAttribute('aria-expanded', this.nextElementSibling.classList.contains('open'))">
+                <span class="icon-menu">&#9776;</span>
+            </button>
+            <ul class="nav-links">
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#skills">Skills</a></li>
+                <li><a href="#writing">Writing</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#contact">Contact</a></li>
+                <li>
+                    <button class="theme-toggle" aria-label="Toggle dark mode" onclick="toggleTheme()">
+                        <span class="icon-moon">&#9790;</span>
+                        <span class="icon-sun">&#9728;</span>
+                    </button>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
     <div class="container">
+        <!-- Hero / Header -->
         <header>
-            <h1>Your Name</h1>
-            <p class="tagline">Building intelligent applications with AI</p>
+            <div class="hero-badge">AI & No-Code Builder</div>
+            <h1>
+                Hi, I'm <span class="gradient-text">Anshul G</span>
+            </h1>
+            <p class="tagline">
+                I build practical AI applications that solve real problems &mdash; using no-code tools, modern APIs, and thoughtful design.
+            </p>
             <div class="social-links">
-                <a href="https://twitter.com/yourhandle" target="_blank">Twitter</a>
-                <a href="https://linkedin.com/in/yourprofile" target="_blank">LinkedIn</a>
-                <a href="https://github.com/yourusername" target="_blank">GitHub</a>
-                <a href="mailto:your@email.com">Email</a>
+                <a href="https://linkedin.com/in/yourprofile" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn profile">
+                    &#128101; LinkedIn
+                </a>
+                <a href="https://github.com/nocoderdecoder" target="_blank" rel="noopener noreferrer" aria-label="GitHub profile">
+                    &#128187; GitHub
+                </a>
+                <a href="mailto:your@email.com" aria-label="Send email">
+                    &#9993; Email
+                </a>
             </div>
         </header>
 
-        <section id="projects">
-            <h2>Projects</h2>
-            <div class="project-grid">
+        <!-- Projects -->
+        <section id="projects" class="reveal">
+            <div class="section-header">
+                <h2>Projects</h2>
+                <p class="section-subtitle">Applications I've built with AI and no-code tools</p>
+            </div>
+            <div class="project-grid reveal-stagger">
+                <!-- PROJECT 1: Replace the title, description, metric, tags, and link below -->
                 <div class="project-card">
-                    <h3>Project Name 1</h3>
-                    <p>A brief description of what this project does and the problem it solves. Keep it concise and focused on value.</p>
-                    <div class="project-tags">
-                        <span class="tag">GPT-4</span>
-                        <span class="tag">Bubble</span>
-                        <span class="tag">No-code</span>
+                    <div class="project-image project-image-1" aria-hidden="true">&#9881;</div>
+                    <div class="project-body">
+                        <h3>Your Project Title</h3>
+                        <p>Describe what this project does and the problem it solves. Keep it to 1-2 sentences.</p>
+                        <div class="project-metric">&#9650; Key metric or result</div>
+                        <div class="project-tags">
+                            <span class="tag">Tag 1</span>
+                            <span class="tag">Tag 2</span>
+                            <span class="tag">Tag 3</span>
+                        </div>
+                        <a href="#" class="project-link">View Project &#8594;</a>
                     </div>
-                    <a href="#" class="project-link">View Project →</a>
                 </div>
 
+                <!-- PROJECT 2: Replace the title, description, metric, tags, and link below -->
                 <div class="project-card">
-                    <h3>Project Name 2</h3>
-                    <p>Another AI application showcasing different capabilities. Highlight the unique aspects and use cases.</p>
-                    <div class="project-tags">
-                        <span class="tag">Claude</span>
-                        <span class="tag">API</span>
-                        <span class="tag">Automation</span>
+                    <div class="project-image project-image-2" aria-hidden="true">&#9889;</div>
+                    <div class="project-body">
+                        <h3>Your Project Title</h3>
+                        <p>Describe what this project does and the problem it solves. Keep it to 1-2 sentences.</p>
+                        <div class="project-metric">&#9650; Key metric or result</div>
+                        <div class="project-tags">
+                            <span class="tag">Tag 1</span>
+                            <span class="tag">Tag 2</span>
+                            <span class="tag">Tag 3</span>
+                        </div>
+                        <a href="#" class="project-link">View Project &#8594;</a>
                     </div>
-                    <a href="#" class="project-link">View Project →</a>
                 </div>
 
+                <!-- PROJECT 3: Replace the title, description, metric, tags, and link below -->
                 <div class="project-card">
-                    <h3>Project Name 3</h3>
-                    <p>Describe the innovation or specific problem this solves. Include any impressive results or metrics.</p>
-                    <div class="project-tags">
-                        <span class="tag">Voice AI</span>
-                        <span class="tag">FlutterFlow</span>
+                    <div class="project-image project-image-3" aria-hidden="true">&#127908;</div>
+                    <div class="project-body">
+                        <h3>Your Project Title</h3>
+                        <p>Describe what this project does and the problem it solves. Keep it to 1-2 sentences.</p>
+                        <div class="project-metric">&#9650; Key metric or result</div>
+                        <div class="project-tags">
+                            <span class="tag">Tag 1</span>
+                            <span class="tag">Tag 2</span>
+                            <span class="tag">Tag 3</span>
+                        </div>
+                        <a href="#" class="project-link">View Project &#8594;</a>
                     </div>
-                    <a href="#" class="project-link">View Project →</a>
                 </div>
             </div>
         </section>
 
-        <section id="writing">
-            <h2>Writing</h2>
-            <ul class="blog-list">
+        <!-- Skills / Tools -->
+        <section id="skills" class="reveal">
+            <div class="section-header">
+                <h2>Skills & Tools</h2>
+                <p class="section-subtitle">Technologies I work with every day</p>
+            </div>
+            <div class="skills-grid reveal-stagger">
+                <div class="skill-item">
+                    <div class="skill-icon">&#129302;</div>
+                    <div class="skill-name">GPT-4 / OpenAI</div>
+                    <div class="skill-type">AI Model</div>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-icon">&#9889;</div>
+                    <div class="skill-name">Claude API</div>
+                    <div class="skill-type">AI Model</div>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-icon">&#128313;</div>
+                    <div class="skill-name">Bubble</div>
+                    <div class="skill-type">No-Code</div>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-icon">&#128241;</div>
+                    <div class="skill-name">FlutterFlow</div>
+                    <div class="skill-type">Mobile</div>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-icon">&#128279;</div>
+                    <div class="skill-name">Zapier / Make</div>
+                    <div class="skill-type">Automation</div>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-icon">&#127912;</div>
+                    <div class="skill-name">Figma</div>
+                    <div class="skill-type">Design</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Writing -->
+        <section id="writing" class="reveal">
+            <div class="section-header">
+                <h2>Writing</h2>
+                <p class="section-subtitle">Thoughts on AI, building products, and no-code</p>
+            </div>
+            <ul class="blog-list reveal-stagger">
+                <!-- BLOG POST 1: Replace the title, date, summary, read time, and link below -->
                 <li class="blog-item">
-                    <h3>Blog Post Title Goes Here</h3>
-                    <div class="blog-date">October 2024</div>
-                    <p>A compelling summary of your blog post that makes people want to read more. Focus on the key insight or takeaway.</p>
-                    <a href="#" class="project-link">Read more →</a>
+                    <div class="blog-content">
+                        <h3><a href="#">Your Blog Post Title</a></h3>
+                        <div class="blog-date">Month Year</div>
+                        <p>A short summary of your blog post. Focus on the key insight or takeaway that makes people want to read more.</p>
+                    </div>
+                    <div class="blog-read-time">5 min read</div>
                 </li>
+                <!-- BLOG POST 2: Replace the title, date, summary, read time, and link below -->
                 <li class="blog-item">
-                    <h3>Another Insightful Post</h3>
-                    <div class="blog-date">September 2024</div>
-                    <p>Share your learnings, frameworks, or perspectives on AI. These establish your thought leadership.</p>
-                    <a href="#" class="project-link">Read more →</a>
+                    <div class="blog-content">
+                        <h3><a href="#">Your Blog Post Title</a></h3>
+                        <div class="blog-date">Month Year</div>
+                        <p>A short summary of your blog post. Focus on the key insight or takeaway that makes people want to read more.</p>
+                    </div>
+                    <div class="blog-read-time">5 min read</div>
                 </li>
+                <!-- BLOG POST 3: Replace the title, date, summary, read time, and link below -->
                 <li class="blog-item">
-                    <h3>Technical Deep Dive</h3>
-                    <div class="blog-date">August 2024</div>
-                    <p>Tutorial or case study showing your expertise in a specific area of AI applications.</p>
-                    <a href="#" class="project-link">Read more →</a>
+                    <div class="blog-content">
+                        <h3><a href="#">Your Blog Post Title</a></h3>
+                        <div class="blog-date">Month Year</div>
+                        <p>A short summary of your blog post. Focus on the key insight or takeaway that makes people want to read more.</p>
+                    </div>
+                    <div class="blog-read-time">5 min read</div>
                 </li>
             </ul>
         </section>
 
-        <section id="about">
-            <h2>About</h2>
-            <div style="background: white; padding: 40px; border-radius: 8px; border: 1px solid #e0e0e0;">
-                <p style="font-size: 1.1em; line-height: 1.8; color: #333;">
-                    I build practical AI applications that solve real problems. My focus is on making AI accessible through no-code tools and thoughtful design. Currently exploring [your current focus area].
+        <!-- About -->
+        <section id="about" class="reveal">
+            <div class="section-header">
+                <h2>About</h2>
+            </div>
+            <div class="about-card">
+                <p>
+                    I'm Anshul G &mdash; I build practical AI applications that solve real problems. My focus is on making AI accessible through no-code tools and thoughtful design, turning complex AI capabilities into products people actually use.
                 </p>
-                <p style="font-size: 1.1em; line-height: 1.8; color: #333; margin-top: 20px;">
-                    I share what I learn about AI implementation, product building, and the intersection of technology and human needs.
+                <p>
+                    I share what I learn about AI implementation, product building, and the intersection of technology and human needs. Whether it's a voice-powered mobile app or an automated content pipeline, I believe the best tools are the ones that get out of your way and let you create.
                 </p>
+                <div class="about-highlights">
+                    <div class="about-stat">
+                        <div class="about-stat-number">10+</div>
+                        <div class="about-stat-label">AI Apps Shipped</div>
+                    </div>
+                    <div class="about-stat">
+                        <div class="about-stat-number">3+</div>
+                        <div class="about-stat-label">Years Building</div>
+                    </div>
+                    <div class="about-stat">
+                        <div class="about-stat-number">5K+</div>
+                        <div class="about-stat-label">Users Reached</div>
+                    </div>
+                    <div class="about-stat">
+                        <div class="about-stat-number">15+</div>
+                        <div class="about-stat-label">Articles Written</div>
+                    </div>
+                </div>
             </div>
         </section>
 
+        <!-- Contact / CTA -->
+        <section id="contact" class="reveal">
+            <div class="contact-section">
+                <h2>Let's Build Something Together</h2>
+                <p class="contact-subtitle">
+                    Have an idea for an AI application? Looking to collaborate or just want to chat about no-code and AI? I'd love to hear from you.
+                </p>
+                <div class="contact-buttons">
+                    <a href="mailto:your@email.com" class="btn btn-primary">
+                        &#9993; Get in Touch
+                    </a>
+                    <a href="https://linkedin.com/in/yourprofile" target="_blank" rel="noopener noreferrer" class="btn btn-outline">
+                        &#128101; Connect on LinkedIn
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
         <footer>
-            <p>© 2024 Your Name. Built with curiosity and AI.</p>
+            <div class="footer-links">
+                <a href="#projects">Projects</a>
+                <a href="#writing">Writing</a>
+                <a href="#about">About</a>
+                <a href="https://github.com/nocoderdecoder" target="_blank" rel="noopener noreferrer">GitHub</a>
+            </div>
+            <p>&copy; 2025 Anshul G. Built with curiosity and AI.</p>
         </footer>
     </div>
+
+    <!-- JavaScript: Theme Toggle + Scroll Animations -->
+    <script>
+        // Dark mode toggle with localStorage persistence
+        function toggleTheme() {
+            const html = document.documentElement;
+            const current = html.getAttribute('data-theme');
+            const next = current === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', next);
+            localStorage.setItem('theme', next);
+        }
+
+        // Restore saved theme
+        (function () {
+            const saved = localStorage.getItem('theme');
+            if (saved) {
+                document.documentElement.setAttribute('data-theme', saved);
+            } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                document.documentElement.setAttribute('data-theme', 'dark');
+            }
+        })();
+
+        // Scroll-triggered reveal animations
+        (function () {
+            var revealElements = document.querySelectorAll('.reveal');
+
+            function onScroll() {
+                var windowHeight = window.innerHeight;
+                for (var i = 0; i < revealElements.length; i++) {
+                    var el = revealElements[i];
+                    var top = el.getBoundingClientRect().top;
+                    if (top < windowHeight - 80) {
+                        el.classList.add('visible');
+                    }
+                }
+            }
+
+            window.addEventListener('scroll', onScroll, { passive: true });
+            onScroll(); // Run once on load
+        })();
+
+        // Close mobile menu when a link is clicked
+        document.querySelectorAll('.nav-links a').forEach(function (link) {
+            link.addEventListener('click', function () {
+                var menu = document.querySelector('.nav-links');
+                menu.classList.remove('open');
+                var btn = document.querySelector('.mobile-menu-btn');
+                btn.setAttribute('aria-expanded', 'false');
+            });
+        });
+    </script>
 </body>
 </html>
