@@ -363,6 +363,97 @@
   .reveal.in { opacity: 1; transform: none; }
   .d1 { transition-delay: 0.1s; } .d2 { transition-delay: 0.2s; } .d3 { transition-delay: 0.3s; }
 
+  /* ===== PromptGrade Modal ===== */
+  .pg-overlay {
+    position: fixed; inset: 0; z-index: 300;
+    background: rgba(0,0,0,0.88);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    display: flex; align-items: flex-start; justify-content: center;
+    padding: 64px 24px 64px;
+    overflow-y: auto;
+    cursor: none;
+  }
+  .pg-modal {
+    background: var(--surface);
+    border: 1px solid rgba(255,255,255,0.07);
+    width: 100%; max-width: 680px;
+    padding: 52px;
+    position: relative;
+  }
+  .pg-close {
+    position: absolute; top: 20px; right: 20px;
+    background: none; border: 1px solid rgba(255,255,255,0.07);
+    color: var(--muted2); font-size: 18px; cursor: none;
+    width: 38px; height: 38px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-body); line-height: 1;
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .pg-close:hover { border-color: var(--accent); color: var(--accent); }
+  .pg-num { font-size: 11px; font-weight: 500; letter-spacing: 0.15em; color: var(--muted); margin-bottom: 20px; }
+  .pg-title {
+    font-family: var(--font-display);
+    font-size: clamp(42px, 6vw, 68px);
+    letter-spacing: 3px; line-height: 0.95; margin-bottom: 12px;
+  }
+  .pg-tagline {
+    font-size: 14px; font-weight: 300; color: var(--muted2);
+    line-height: 1.7; margin-bottom: 32px; max-width: 480px;
+  }
+  .pg-btns { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 48px; }
+  .pg-btn-solid {
+    background: var(--accent); color: #000;
+    font-family: var(--font-body); font-size: 12px; font-weight: 600;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    padding: 13px 28px; text-decoration: none; display: inline-block;
+    clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 0 100%);
+    transition: box-shadow 0.2s, transform 0.15s; cursor: none;
+  }
+  .pg-btn-solid:hover { transform: translateY(-2px); box-shadow: 0 12px 36px rgba(200,255,0,0.2); }
+  .pg-btn-line {
+    font-size: 12px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--muted2); text-decoration: none; cursor: none;
+    display: inline-flex; align-items: center; gap: 8px; padding: 13px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.1); transition: color 0.2s, border-color 0.2s;
+  }
+  .pg-btn-line span { transition: transform 0.2s; }
+  .pg-btn-line:hover { color: var(--text); border-color: var(--accent); }
+  .pg-btn-line:hover span { transform: translateX(4px); }
+  .pg-hr { border: none; border-top: 1px solid rgba(255,255,255,0.06); margin: 0 0 32px; }
+  .pg-section-label {
+    font-size: 10px; font-weight: 600; letter-spacing: 0.24em; text-transform: uppercase;
+    color: var(--accent); display: flex; align-items: center; gap: 10px; margin-bottom: 14px;
+  }
+  .pg-section-label::before { content: ''; width: 20px; height: 1px; background: var(--accent); }
+  .pg-body {
+    font-size: 14px; font-weight: 300; color: var(--muted2);
+    line-height: 1.85; margin-bottom: 36px;
+  }
+  .pg-readme {
+    background: var(--bg2); border: 1px solid rgba(255,255,255,0.06);
+    padding: 28px 32px; margin-bottom: 36px;
+  }
+  .pg-readme-title { font-family: var(--font-display); font-size: 30px; letter-spacing: 1px; margin-bottom: 8px; }
+  .pg-readme-desc { font-size: 13px; font-weight: 300; color: var(--muted2); line-height: 1.7; margin-bottom: 20px; }
+  .pg-meta-table { border-top: 1px solid rgba(255,255,255,0.06); padding-top: 14px; display: flex; flex-direction: column; gap: 8px; }
+  .pg-meta-row { display: flex; gap: 20px; font-size: 12px; }
+  .pg-meta-key { font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: var(--muted); min-width: 80px; }
+  .pg-meta-val { color: var(--muted2); }
+  .pg-code {
+    background: var(--bg); border: 1px solid rgba(255,255,255,0.06);
+    padding: 24px 28px;
+    font-family: 'SF Mono', 'Fira Code', Consolas, 'Courier New', monospace;
+    font-size: 12px; line-height: 1.9;
+    color: var(--muted2); overflow-x: auto; white-space: pre; margin: 0;
+  }
+  .pg-tags-row { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 36px; }
+  @media (max-width: 768px) {
+    .pg-modal { padding: 36px 24px; }
+    .pg-btns { flex-direction: column; }
+    .pg-btn-line { padding: 11px 0; }
+  }
+
   body::before {
     content: ''; position: fixed; inset: 0; z-index: 9997; pointer-events: none;
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
@@ -519,7 +610,7 @@
     </div>
 
     <div class="pcard p-m reveal" style="border-color:rgba(200,255,0,0.12);background:rgba(200,255,0,0.025)">
-      <div class="pnum">05 / 05</div>
+      <div class="pnum">05 / 06</div>
       <div class="ptag">Sports Tech</div>
       <h3 class="pname">CRICKET MATCH<br>AUTOMATION</h3>
       <p class="pdesc">Live T20 tracker with auto-generated social commentary and match stat summaries.</p>
@@ -527,11 +618,19 @@
       <div class="pcard-arrow">→</div>
     </div>
 
-    <div class="pcard p-m reveal d1" style="border-style:dashed;display:flex;align-items:center;justify-content:center">
-      <div style="text-align:center">
-        <div style="font-family:var(--font-display);font-size:52px;letter-spacing:2px;color:var(--muted);line-height:1">YOUR<br><span style="color:var(--accent)">IDEA?</span></div>
-        <p style="font-size:13px;font-weight:300;color:var(--muted);margin-top:12px;max-width:200px;line-height:1.6">Have a workflow that needs automation? Let's build it.</p>
-      </div>
+    <div class="pcard p-m reveal d1" onclick="openPGModal()" style="border-color:rgba(200,255,0,0.12);background:rgba(200,255,0,0.018)">
+      <div class="pcard-glow gc1"></div>
+      <svg class="deco" width="200" height="200" style="top:-20px;right:-20px;opacity:0.04" viewBox="0 0 200 200">
+        <circle cx="100" cy="100" r="90" stroke="white" stroke-width="1" fill="none"/>
+        <circle cx="100" cy="100" r="60" stroke="white" stroke-width="1" fill="none"/>
+        <circle cx="100" cy="100" r="30" stroke="white" stroke-width="1" fill="none"/>
+      </svg>
+      <div class="pnum">06 / 06</div>
+      <div class="ptag">AI Tools</div>
+      <h3 class="pname">PROMPTGRADE</h3>
+      <p class="pdesc">Score your AI prompts out of 100 across 5 dimensions, see what's weak, and get an optimized rewrite with negative prompting instantly.</p>
+      <div class="pstack"><span class="sbadge">Claude API</span><span class="sbadge">Next.js</span><span class="sbadge">Vercel</span></div>
+      <div class="pcard-arrow">→</div>
     </div>
 
   </div>
@@ -585,6 +684,59 @@
     <a href="#">GitHub</a>
   </div>
 </footer>
+
+<!-- PromptGrade Detail Modal -->
+<div id="pg-overlay" class="pg-overlay" style="display:none" role="dialog" aria-modal="true" aria-labelledby="pg-title" onclick="if(event.target===this)closePGModal()">
+  <div class="pg-modal">
+    <button class="pg-close" onclick="closePGModal()" aria-label="Close">&times;</button>
+    <div class="pg-num">06 / 06</div>
+    <h2 class="pg-title" id="pg-title">PROMPT<br>GRADE</h2>
+    <p class="pg-tagline">Score your AI prompts and get a perfectly rewritten version instantly</p>
+    <div class="pg-tags-row">
+      <span class="sbadge">Claude API</span>
+      <span class="sbadge">Next.js 14</span>
+      <span class="sbadge">Vercel</span>
+    </div>
+    <div class="pg-btns">
+      <a href="https://www.ratemyprompt.pro" target="_blank" rel="noopener noreferrer" class="pg-btn-solid">&#127758; Visit ratemyprompt.pro</a>
+      <a href="https://github.com/nocoderdecoder/prompt-grader" target="_blank" rel="noopener noreferrer" class="pg-btn-line">&#128187; View on GitHub <span>→</span></a>
+    </div>
+
+    <hr class="pg-hr">
+
+    <div class="pg-section-label">What problem it solves</div>
+    <p class="pg-body">Most AI prompts are vague, incomplete, or missing critical context &mdash; leading to mediocre outputs and endless back-and-forth. PromptGrade analyzes any prompt across 5 key dimensions, shows exactly what&rsquo;s weak in plain English, and instantly rewrites it into a high-performance version with negative prompting where helpful.</p>
+
+    <hr class="pg-hr">
+
+    <div class="pg-section-label">How it works technically</div>
+    <p class="pg-body">Paste a prompt and optional context into the interface. The Claude API (claude-sonnet-4) evaluates it across five dimensions &mdash; clarity, specificity, context, constraints, and output format &mdash; and assigns a score out of 100. It explains each weakness in plain English, then generates an optimized rewrite, adding negative prompting where it helps. Built with Next.js 14 and deployed on Vercel for serverless, near-instant responses.</p>
+
+    <hr class="pg-hr">
+
+    <div class="pg-section-label">README</div>
+    <div class="pg-readme">
+      <div class="pg-readme-title">PROMPTGRADE</div>
+      <p class="pg-readme-desc">Score your AI prompts and get a perfectly rewritten version instantly. Paste any prompt, get a score out of 100, see exactly what is weak, and get a rewritten version with negative prompting where helpful.</p>
+      <div class="pg-meta-table">
+        <div class="pg-meta-row"><span class="pg-meta-key">Framework</span><span class="pg-meta-val">Next.js 14</span></div>
+        <div class="pg-meta-row"><span class="pg-meta-key">AI Model</span><span class="pg-meta-val">Claude API (claude-sonnet-4)</span></div>
+        <div class="pg-meta-row"><span class="pg-meta-key">Deploy</span><span class="pg-meta-val">Vercel</span></div>
+      </div>
+    </div>
+
+    <hr class="pg-hr">
+
+    <div class="pg-section-label">Run It Yourself</div>
+    <pre class="pg-code">git clone https://github.com/nocoderdecoder/prompt-grader
+cd prompt-grader
+npm install
+cp .env.example .env.local
+# Add ANTHROPIC_API_KEY to .env.local
+npm run dev
+# Open http://localhost:3000</pre>
+  </div>
+</div>
 
 <script>
 // CANVAS MOTION
@@ -706,6 +858,32 @@ document.addEventListener('mousemove', e => {
 document.querySelectorAll('a,button,.pcard,.bcard').forEach(el => {
   el.addEventListener('mouseenter', () => ring.classList.add('hovered'));
   el.addEventListener('mouseleave', () => ring.classList.remove('hovered'));
+});
+
+// PROMPTGRADE MODAL
+function openPGModal() {
+  var overlay = document.getElementById('pg-overlay');
+  overlay.style.display = 'flex';
+  overlay.scrollTop = 0;
+  document.body.style.overflow = 'hidden';
+  overlay.querySelector('.pg-close').focus();
+}
+function closePGModal() {
+  document.getElementById('pg-overlay').style.display = 'none';
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') closePGModal();
+});
+// extend cursor hover to modal interactive elements
+document.querySelectorAll('.pg-btn-solid,.pg-btn-line,.pg-close').forEach(el => {
+  el.addEventListener('mouseenter', () => ring.classList.add('hovered'));
+  el.addEventListener('mouseleave', () => ring.classList.remove('hovered'));
+});
+// move custom cursor inside modal overlay
+document.getElementById('pg-overlay').addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY;
+  cur.style.left = mx-4+'px'; cur.style.top = my-4+'px';
 });
 
 // NAV
